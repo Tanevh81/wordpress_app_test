@@ -26,4 +26,4 @@ jobs:
       if: success()
       run: |
         echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-        docker push tanevh/wordpress-app:latest
+        docker push tanevh/wordpress-app_test:latest
