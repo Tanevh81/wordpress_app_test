@@ -1,25 +1,13 @@
-# WordPress Dockerfile: Create container from official WordPress image, basic customizations.
-# docker build -t wordpress_local:wp_custom_1.0 .
+# Stage 1: Prepare the base operating system image
+FROM ubuntu:20.04 AS base
 
-FROM wordpress:latest
+# Update the package list and install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    # Add your required dependencies here
+    && rm -rf /var/lib/apt/lists/*
 
-# APT Update/Upgrade, then install packages we need
-RUN apt update && \
-    apt upgrade -y && \
-    apt autoremove && \
-    apt install -y \
-    vim \
-    wget \
-    mariadb-client
+# Stage 2: Install and configure WordPress
+FROM wordpress:php7.4-apache AS wordpress
 
-# Replace php.ini
-COPY php.ini /usr/local/etc/php
-
-# Install WP-CLI
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    php wp-cli.phar --info&& \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp && \
-    # Remove old php.ini files (wihtout creating new image)
-    rm /usr/local/etc/php/php.ini-development && \
-    rm /usr/local/etc/php/php.ini-production
+# Add any additional configurations or WordPress setup commands here
